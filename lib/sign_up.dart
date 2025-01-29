@@ -12,266 +12,174 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   bool _isObscured = true;
-  bool _isChecked = false; // To track the state of the checkbox
+  bool _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
-            child: Row(
-              children: [
-                Text(
-                  'Sign up',
-                  style: TextStyle(
-                    fontSize: 16, // Font size
-                    fontWeight: FontWeight.w900, // Optional: to make it bold
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isPortrait = constraints.maxWidth < 600;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: isPortrait ? 24 : constraints.maxWidth * 0.2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 50),
+                  Text(
+                    'Sign up',
+                    style: GoogleFonts.inter(
+                      fontSize: isPortrait ? 18 : 24,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-            child: Row(
-              children: [
-                Text(
-                  'Create an account to get start',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black
-                        .withOpacity(0.5), // Optional: to make it bold
+                  SizedBox(height: 5),
+                  Text(
+                    'Create an account to get started',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 24),
+                  _buildTextField(label: 'Name', hintText: 'Enter your name'),
+                  SizedBox(height: 10),
+                  _buildTextField(
+                      label: 'Email Address', hintText: 'name@gmail.com'),
+                  SizedBox(height: 10),
+                  _buildPasswordField('Password'),
+                  SizedBox(height: 10),
+                  _buildPasswordField('Confirm password'),
+                  SizedBox(height: 24),
+                  _buildTermsAndConditions(),
+                  SizedBox(height: 30),
+                  _buildSignUpButton(),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          Padding(
-            // padding: const EdgeInsets.all(16.0),
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+          );
+        },
+      ),
+    );
+  }
 
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                'Name', // Label text
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 8), // Space between label and text field
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8), // Rounded corners
-                  ),
-                  hintText: 'Enter your name',
-                ),
-              ),
-            ]),
+  Widget _buildTextField({required String label, required String hintText}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8),
+        TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            hintText: hintText,
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                'Email Address', // Label text
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 8), // Space between label and text field
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8), // Rounded corners
-                  ),
-                  hintText: 'name@gmail.com',
-                ),
-              ),
-            ]),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Password', // Label text
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
+        ),
+      ],
+    );
+  }
 
-                SizedBox(height: 8), // Space between label and text field
-                TextField(
-                  obscureText: !_isObscured, // Obscure text when not visible
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                    ),
-                    hintText: 'Enter your password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscured ? Icons.visibility : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscured = !_isObscured;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextField(
-                  obscureText: !_isObscured, // Obscure text when not visible
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                    ),
-                    hintText: 'Confirm password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscured ? Icons.visibility : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscured = !_isObscured;
-                        });
-                      },
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: Checkbox(
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(6), // Adjust the radius
-                    ),
-                    // visualDensity: VisualDensity(horizontal: -4, vertical: -4), // Adjust size
-
-                    value: _isChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _isChecked =
-                            value ?? false; // Update the checkbox state
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'I’ve read and agree with the ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Terms and Condition',
-                          style: TextStyle(
-                            color: Colors.blue, // Blue text without underline
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle "Terms and Condition" tap
-                              print('Terms and Condition tapped');
-                            },
-                        ),
-                        TextSpan(
-                          text: ' and the ',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        TextSpan(
-                          text: 'Privacy Policy',
-                          style: TextStyle(
-                            color: Colors.blue, // Blue text without underline
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle "Privacy Policy" tap
-                              print('Privacy Policy tapped');
-                            },
-                        ),
-                        TextSpan(
-                          text: '.',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-            child: ElevatedButton(
+  Widget _buildPasswordField(String label) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8),
+        TextField(
+          obscureText: _isObscured,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            hintText: label,
+            suffixIcon: IconButton(
+              icon: Icon(
+                _isObscured ? Icons.visibility : Icons.visibility_off,
+              ),
               onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (ctx) => Otp()));
-                // print('Login button pressed');
+                setState(() {
+                  _isObscured = !_isObscured;
+                });
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue, // Blue color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Rounded corners
-                ),
-                padding: EdgeInsets.symmetric(vertical: 12), // Button size
-                minimumSize: Size(
-                    double.infinity, 50), // Full width (cover width) and height
-              ),
-              child: Text(
-                'Sign up',
-                style: GoogleFonts.inter(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold), // Text styling
-              ),
             ),
           ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTermsAndConditions() {
+    return Row(
+      children: [
+        Checkbox(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          value: _isChecked,
+          onChanged: (bool? value) {
+            setState(() {
+              _isChecked = value ?? false;
+            });
+          },
+        ),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              text: 'I’ve read and agree with the ',
+              style: TextStyle(color: Colors.black, fontSize: 12),
+              children: [
+                TextSpan(
+                  text: 'Terms and Conditions',
+                  style: TextStyle(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      print('Terms tapped');
+                    },
+                ),
+                TextSpan(
+                  text: ' and the ',
+                  style: TextStyle(color: Colors.black),
+                ),
+                TextSpan(
+                  text: 'Privacy Policy',
+                  style: TextStyle(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      print('Privacy tapped');
+                    },
+                ),
+                TextSpan(
+                  text: '.',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignUpButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => Otp()));
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          padding: EdgeInsets.symmetric(vertical: 12),
+        ),
+        child: Text(
+          'Sign up',
+          style: GoogleFonts.inter(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

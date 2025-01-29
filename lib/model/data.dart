@@ -7,12 +7,12 @@ class Item
 {
   Item({
     required this.title,
-    // required this.amount,
+    required this.amount,
   }) : id = uuid.v4();
 
   final String id;
   final String title;
-  // final int amount;
+  final int amount;
 
 
 }

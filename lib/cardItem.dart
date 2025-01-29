@@ -1,80 +1,81 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project/model/data.dart';
 
 class CardItem extends StatelessWidget {
   const CardItem({super.key, required this.item});
-final Item item;
+  final Item item;
+
   @override
   Widget build(BuildContext context) {
-    return  Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between cards
-        children: [
-          // First Card
-          Container(
-            height: 189,
-            width: 144,
+    double screenWidth = MediaQuery.of(context).size.width;
+    final width = 0.83;
 
+    return Row(
+      children: [
+        // First Card
+        Expanded( // Ensures it does not cause overflow
+          child: Container(
+            height: 189,
+            width: width,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16), // Card radius
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
                   blurRadius: 8,
-                  offset: Offset(0, 4), // Shadow position
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Image Section
                 ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16), // Top corners rounded
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
                     topRight: Radius.circular(16),
                   ),
                   child: Image.asset(
-                    'assets/image1.jpg', // Replace with your image
+                    'assets/image1.jpg',
                     fit: BoxFit.cover,
-                    width: double.infinity, // Image covers full width
-                    height: 120, // Adjust height as needed
+                    width: double.infinity,
+                    height: 120,
                   ),
                 ),
-                SizedBox(height: 8), // Spacing between image and text
+                const SizedBox(height: 8),
                 // Text Section
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         item.title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      // Text(
-                      //   item.amount.toString(),
-                      //   style: TextStyle(
-                      //     fontSize: 14,
-                      //     fontWeight: FontWeight.bold,
-                      //     color: Colors.black,
-                      //   ),
-                      // ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "₹${item.amount}", // Display amount
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          // Second Card
-
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

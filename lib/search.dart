@@ -1,9 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:project/cardItem.dart';
-import 'package:project/filter.dart';
-import 'package:project/model/dummyData.dart';
-
+import 'cardItem.dart';
 import 'model/data.dart';
+import 'model/dummyData.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -13,179 +12,163 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
+    int columnCount = 2;
+    // Number of columns
+     // double width = MediaQuery.of(context).size.width;
+    // double cardWidth = (width * 0.82);
+    int crossAxisCount = 3;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double cardWidth = (screenWidth * 0.82) / crossAxisCount;
+    double cardHeight = cardWidth * (crossAxisCount == 2 ? 4 / 3 : 10 / 5);
+    double childAspectRatio = cardWidth / cardHeight;
+
+    // print('Screen width : $width');
     return Scaffold(
-        body: Column(children: [
-      Padding(
-          padding: const EdgeInsets.fromLTRB(24, 60, 24, 0),
-          child: Column(
-            children: [
-              TextField(
-                controller: _searchController,
-                onChanged: (query) {
-                  print("Search Query: $query");
-                },
-                decoration: InputDecoration(
-                  labelText: 'Search',
-                  // hintText: 'Enter search term',
-                  prefixIcon: Icon(Icons.search),
-                  suffixIcon: _searchController.text.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                          },
-                        )
-                      : null,
-                  filled: true, // Enable the background color
-                  fillColor:
-                      Colors.blue.withOpacity(0.1), // Light blue background
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24), // Border radius 24
-                    borderSide: BorderSide(
-                      color: Colors.blue.withOpacity(0.5), // Light blue border
-                      width: 0.1,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 60, 24, 0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _searchController,
+                  onChanged: (query) {
+                    if (kDebugMode) {
+                      print("Search Query: $query");
+                    }
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Search',
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                      },
+                    )
+                        : null,
+                    filled: true,
+                    fillColor: Colors.blue.withOpacity(0.1),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(
+                        color: Colors.blue.withOpacity(0.5),
+                        width: 0.1,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(
+                        color: Colors.blue.withOpacity(0.0),
+                        width: 1.5,
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24), // Border radius 24
-                    borderSide: BorderSide(
-                      color: Colors.blue.withOpacity(0.0), // Light blue border
-                      width: 1.5,
-                    ),
-                  ),
-                  // contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 ),
-              ),
-            ],
-          )),
-      SizedBox(
-        height: 16,
-      ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            OutlinedButton(
-              onPressed: () {
-                // Handle button press
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.grey), // Outline color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // Rounded corners
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min, // Ensure the row only takes up necessary space
-                children: [
-                  Icon(
-                    Icons.sort, // Filter icon
-                    color: Colors.blue, // Icon color
-                  ),
-                  SizedBox(width: 8), // Spacing between the icon and text
-                  Text(
-                    'Sort', // Button text
-                    style: TextStyle(
-                      color: Colors.blue, // Text color
-                      fontSize: 16, // Text size
-                    ),
-                  ),
-                  SizedBox(width: 2), // Spacing between text and dropdown icon
-                  Icon(
-                    Icons.arrow_drop_down, // Dropdown icon
-                    color: Colors.blue, // Icon color
-                  ),
-                ],
-              ),
+              ],
             ),
-            SizedBox(width: 50,),
-            OutlinedButton(
-              onPressed: () {
-                // Handle button press
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => FilterScreen()));
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.grey), // Outline color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // Rounded corners
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24,0,24,0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Sort Button
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.swap_vert, color: Colors.grey, size: 16),
+                      const SizedBox(width: 4),
+                      const Text(
+                        "Sort",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      const Icon(Icons.keyboard_arrow_down, color: Colors.grey, size: 16),
+                    ],
+                  ),
                 ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min, // Ensure the row only takes up necessary space
-                children: [
-                  Icon(
-                    Icons.filter_list, // Filter icon
-                    color: Colors.blue, // Icon color
+
+                // Filter Button
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
                   ),
-                  SizedBox(width: 8), // Spacing between the icon and text
-                  Text(
-                    'Filter', // Button text
-                    style: TextStyle(
-                      color: Colors.blue, // Text color
-                      fontSize: 16, // Text size
-                    ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.filter_list, color: Colors.grey, size: 16),
+                      const SizedBox(width: 4),
+                      const Text(
+                        "Filter",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Text(
+                          "2",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
+          const SizedBox(height: 30),
 
 
-            // OutlinedButton(
-            //   onPressed: null, // Set to null for dropdown-only behavior
-            //   style: OutlinedButton.styleFrom(
-            //     side: BorderSide(color: Colors.grey), // Outline color
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(12), // Rounded corners
-            //     ),
-            //   ),
-            //   child: Row(
-            //     mainAxisSize: MainAxisSize.min, // Adjust size to fit content
-            //     children: [
-            //       Icon(Icons.filter_alt, color: Colors.blue), // Filter icon
-            //       SizedBox(width: 4), // Small spacing between icon and text
-            //       Text('Sort', style: TextStyle(color: Colors.blue)), // Text
-            //       SizedBox(width: 16), // Extra spacing between text and dropdown
-            //       DropdownButton<String>(
-            //         value: null, // Don't show any selected value
-            //         onChanged: (value) {
-            //           // Handle dropdown selection
-            //         },
-            //         items: [
-            //           DropdownMenuItem(value: 'Asc', child: Text('Ascending')),
-            //           DropdownMenuItem(value: 'Desc', child: Text('Descending')),
-            //         ],
-            //         underline: SizedBox(), // Remove default underline
-            //         icon: Icon(Icons.arrow_drop_down,
-            //             color: Colors.blue), // Only show the icon
-            //         hint: SizedBox(), // No text or hint displayed
-            //       ),
-            //     ],
-            //   ),
-            // ),
-          ],
-        ),
+
+    Expanded(
+    child: SingleChildScrollView(
+      child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0), // Left and Right Padding
+      child: LayoutBuilder(
+      builder: (context, constraints) {
+      double totalSpacing = (columnCount - 1) * 15; // Total horizontal space between cards
+      double availableWidth = constraints.maxWidth - totalSpacing; // Adjust for spacing
+      double cardWidth = availableWidth / columnCount; // Calculate card width
+      
+      return Wrap(
+      spacing: 15, // Horizontal space between cards
+      runSpacing: 20, // Vertical space between rows
+      children: dummy.map((item) {
+      return Container(
+      width: cardWidth,
+      child: CardItem(item: item), // Pass the current Item object
+      );
+      }).toList(),
+      );
+      },
       ),
-      SizedBox(
-        height: 20,
       ),
-          Column(
-            children: [
-              for(final item in dummy)
-                CardItem(item: item,
-                  // category: category,
-                  // onSelectedCategory: () {
-                  //   selectedCategory(context, category);
-                  // },
-                )
-            ],
-          )
-        ]
-        )
+    ),
+    ),
+
+
+
+    ],
+      ),
     );
   }
 }
